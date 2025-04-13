@@ -1,5 +1,5 @@
 # PrettyTrajectory.jl
-Trajectory plotting with Makie.jl ecosystem
+Trajectory plotting with the [Makie](https://docs.makie.org/v0.22/) ecosystem
 
 ## Quick start
 
