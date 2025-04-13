@@ -29,7 +29,7 @@ In julia repl, run
 
 ## Examples
 
-See `examples/examples.ipnyb` for examples & syntax!
+See [examples/examples.ipynb](examples/examples.ipynb) for examples & syntax!
 
 
 ## Gallery
