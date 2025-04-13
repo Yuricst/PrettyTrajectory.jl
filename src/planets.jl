@@ -7,9 +7,12 @@ Plot sphere with UV-sphere texture based on an image file
 See: https://docs.makie.org/v0.22/reference/plots/mesh#example-bb52943
 """
 function plot_planet!(
-    ax,
+    ax::Axis3,
     r::Real,
     center::Tuple{Float64, Float64, Float64} = (0.0, 0.0, 0.0);
+    x_rotation::Real = 0.0,
+    y_rotation::Real = 0.0,
+    z_rotation::Real = 0.0,
     n::Int = 30,
     show_wireframe::Bool = false,
     asset_name::String = Makie.assetpath("earth.png")
@@ -42,7 +45,17 @@ function plot_planet!(
     # We can use a Buffer to update single elements in an array directly on the GPU
     # with GLMakie. They work just like normal arrays, but forward any updates written to them directly to the GPU
     uv_buff = Buffer(uv)
-    gb_mesh = GeometryBasics.Mesh(points, _faces; uv = uv_buff, normal = _normals)
+    #gb_mesh = GeometryBasics.Mesh(points, _faces; uv = uv_buff, normal = _normals)
+
+    # Apply rotations
+    Rx = [1 0 0; 0 cos(x_rotation) -sin(x_rotation); 0 sin(x_rotation) cos(x_rotation)]
+    Ry = [cos(y_rotation) 0 sin(y_rotation); 0 1 0; -sin(y_rotation) 0 cos(y_rotation)]
+    Rz = [cos(z_rotation) -sin(z_rotation) 0; sin(z_rotation) cos(z_rotation) 0; 0 0 1]
+    R = Rz * Ry * Rx
+    
+    rotated_points = [Point3f(R * [p[1], p[2], p[3]]) for p in points]
+    rotated_normals = [R * n for n in _normals]
+    gb_mesh = GeometryBasics.Mesh(rotated_points, _faces; uv = uv_buff, normal = rotated_normals)
 
     data = load(asset_name)
     color = Sampler(rotl90(data'), x_repeat=:mirrored_repeat,y_repeat=:repeat)
