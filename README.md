@@ -49,9 +49,15 @@ Below are examples from `PrettyTrajectory` functions!
 
 ![Cones](test/plots/test_box.png)
 
+#### `OrbitAnimator`
+
+![Orbit scatter animation](test/plots/test_animate_orbit.gif)
+![Orbit trace animation](test/plots/test_animate_orbit_trace.gif)
+
+
 
 ## Missing features (todo)
 
 - Animation
     - [ ] Rotating planet
-    - [ ] Trajectory
+    - [x] Trajectory
