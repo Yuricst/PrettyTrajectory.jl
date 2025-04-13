@@ -1,11 +1,26 @@
 # PrettyTrajectory.jl
 Trajectory plotting with Makie.jl ecosystem
 
-## Quick-step
+## Quick start
 
 ### Development
 
 1. `git clone` this repository
+2. `cd` to root of repository & start julia repl
+3. Run:
+
+```julia-repl
+julia> ]
+(PrettyTrajectory) pkg> test
+```
+
+### Using `PrettyTrajectory` within your project
+
+In julia repl, run
+
+```julia-repl
+(SomeEnvironment) pkg> dev https://github.com/Yuricst/PrettyTrajectory.jl.git
+```
 
 ## Capabilities
 
@@ -14,16 +29,29 @@ Trajectory plotting with Makie.jl ecosystem
 
 ## Examples
 
-See `examples/examples.ipnyb` for examples!
+See `examples/examples.ipnyb` for examples & syntax!
+
 
 ## Gallery
 
+Below are examples from `PrettyTrajectory` functions!
+
+#### `plot_planet!`
+
 ![Earth-Moon System](test/plots/test_earth_moon.png)
 ![Planet Rotations](test/plots/test_planet_rotations.png)
+
+#### `plot_cone!`
+
+![Cones](test/plots/test_cones.png)
+
+#### `plot_3d_box!`
+
+![Cones](test/plots/test_box.png)
 
 
 ## Missing features (todo)
 
 - Animation
-    - [ ] Rotate planet
+    - [ ] Rotating planet
     - [ ] Trajectory

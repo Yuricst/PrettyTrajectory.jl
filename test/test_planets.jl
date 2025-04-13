@@ -32,8 +32,7 @@ function test_planets()
     titles = ["(0,0,0)", "(90,0,0)", "(0,90,0)", "(0,0,90)"]
     for (i,(rotation,axloc)) in enumerate(zip(rotations, axes_locations))
         ax = Axis3(fig[axloc...]; aspect=:data, title="Rotation $(titles[i])")
-        PrettyTrajectory.plot_planet!(ax, 1.0, (0.0, 0.0, 0.0),
-            x_rotation=rotation[1], y_rotation=rotation[2], z_rotation=rotation[3])
+        PrettyTrajectory.plot_planet!(ax, 1.0, (1.0, 2.0, 3.0), rotation=rotation)
     end
     save(joinpath(@__DIR__, "plots/test_planet_rotations.png"), fig; px_per_unit=2)
     @test true

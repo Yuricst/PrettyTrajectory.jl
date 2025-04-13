@@ -6,7 +6,9 @@ module PrettyTrajectory
     using GLMakie
     using LinearAlgebra
 
+    include("geometry3d.jl")
     include("planets.jl")
 
-    export plot_planet!
+    export rotate_shift_points, plot_3d_box!, plot_cone!
+    export plot_sphere_wireframe!, plot_planet!
 end
