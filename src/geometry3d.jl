@@ -10,6 +10,17 @@ function rotate_shift_points(points::Vector{Point3f}, rotation::Tuple{Real,Real,
     return rotated_points, R
 end
 
+function rotate_shift_points_lift(points::Vector{Point3f}, rotation, center::Tuple{Real,Real,Real}, lift_index::Observable{Int})
+    Rx = [1 0 0; 0 cos(rotation[1]) -sin(rotation[1]); 0 sin(rotation[1]) cos(rotation[1])]
+    Ry = [cos(rotation[2]) 0 sin(rotation[2]); 0 1 0; -sin(rotation[2]) 0 cos(rotation[2])]
+    Rz = @lift([cos($lift_index * rotation[3]) -sin($lift_index * rotation[3]) 0; 
+                sin($lift_index * rotation[3]) cos($lift_index * rotation[3]) 0; 
+                0 0 1])
+    R = @lift($Rz * Ry * Rx)
+    rotated_points = @lift([Point3f($R * [p[1], p[2], p[3]] + Vector([center...])) for p in points])
+    return rotated_points, R
+end
+
 
 function plot_3d_box!(axis::Axis3, r_lb, r_ub; color=:red, linewidth=1.5)
     # lower edges

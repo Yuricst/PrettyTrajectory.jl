@@ -56,7 +56,8 @@ function plot_planet!(
     ax::Axis3,
     r::Real,
     center::Tuple{Float64, Float64, Float64} = (0.0, 0.0, 0.0);
-    rotation::Tuple{Float64, Float64, Float64} = (0.0, 0.0, 0.0),
+    rotation = (0.0, 0.0, 0.0),
+    #rotation::Tuple{Float64, Float64, Float64} = (0.0, 0.0, 0.0),
     n::Int = 30,
     show_wireframe::Bool = false,
     asset_name::String = Makie.assetpath("earth.png")
@@ -93,12 +94,6 @@ function plot_planet!(
 
     # Apply rotations & shift center
     rotated_points, R = rotate_shift_points(points, rotation, center)
-    # x_rotation, y_rotation, z_rotation = rotation
-    # Rx = [1 0 0; 0 cos(x_rotation) -sin(x_rotation); 0 sin(x_rotation) cos(x_rotation)]
-    # Ry = [cos(y_rotation) 0 sin(y_rotation); 0 1 0; -sin(y_rotation) 0 cos(y_rotation)]
-    # Rz = [cos(z_rotation) -sin(z_rotation) 0; sin(z_rotation) cos(z_rotation) 0; 0 0 1]
-    # R = Rz * Ry * Rx
-    # rotated_points = [Point3f(R * [p[1], p[2], p[3]] + Vector([center...])) for p in points]
     rotated_normals = [R * n for n in _normals]
     gb_mesh = GeometryBasics.Mesh(rotated_points, _faces; uv = uv_buff, normal = rotated_normals)
 
@@ -108,5 +103,5 @@ function plot_planet!(
     if show_wireframe
         wireframe!(ax, gb_mesh, color=(:black, 0.2), linewidth=2, transparency=true)
     end
-    return
+    return 
 end

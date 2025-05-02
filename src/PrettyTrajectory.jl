@@ -7,10 +7,12 @@ module PrettyTrajectory
     using LinearAlgebra
     using ProgressMeter
 
+    include("geometry2d.jl")
     include("geometry3d.jl")
     include("planets.jl")
     include("animator.jl")
 
+    export plot_circle!
     export rotate_shift_points, plot_3d_box!, plot_cone!
     export plot_sphere_wireframe!, plot_planet!
 end

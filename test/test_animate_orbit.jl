@@ -3,10 +3,9 @@
 using GLMakie
 using ProgressMeter
 
-# if !@isdefined PrettyTrajectory
-#     include(joinpath(@__DIR__, "..", "src", "PrettyTrajectory.jl"))
-# end
-include(joinpath(@__DIR__, "..", "src", "PrettyTrajectory.jl"))
+if !@isdefined PrettyTrajectory
+    include(joinpath(@__DIR__, "..", "src", "PrettyTrajectory.jl"))
+end
 
 function test_animate_orbit()
     # create fictitious trajectory state history
