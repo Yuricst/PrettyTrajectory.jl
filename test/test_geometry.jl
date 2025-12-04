@@ -33,6 +33,7 @@ function test_geometry()
     box_ub = [1.0, 2.0, 0.5]
     PrettyTrajectory.plot_3d_box!(ax, box_lb, box_ub)
     save(joinpath(@__DIR__, "plots/test_box.png"), fig; px_per_unit=2)
+    display(fig)
     @test true
 end
 

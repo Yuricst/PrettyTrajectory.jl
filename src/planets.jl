@@ -65,9 +65,15 @@ function plot_planet!(
     # Create vertices for a Sphere
     θ = LinRange(0, pi, n)
     φ2 = LinRange(0, 2pi, 2 * n)
-    x2 = [r * cos(φv) * sin(θv) for θv in θ, φv in φ2]
-    y2 = [r * sin(φv) * sin(θv) for θv in θ, φv in φ2]
-    z2 = [r * cos(θv) for θv in θ, φv in φ2]
+    if rotation != (0.0, 0.0, 0.0)
+        x2 = [r * cos(φv) * sin(θv) for θv in θ, φv in φ2]
+        y2 = [r * sin(φv) * sin(θv) for θv in θ, φv in φ2]
+        z2 = [r * cos(θv) for θv in θ, φv in 2φ2]
+    else
+        x2 = [center[1] + r * cos(φv) * sin(θv) for θv in θ, φv in φ2]
+        y2 = [center[2] + r * sin(φv) * sin(θv) for θv in θ, φv in φ2]
+        z2 = [center[3] + r * cos(θv) for θv in θ, φv in 2φ2]
+    end
     points = vec([Point3f(xv, yv, zv) for (xv, yv, zv) in zip(x2, y2, z2)])
 
     # The coordinates form a matrix, so to connect neighboring vertices with a face
@@ -86,20 +92,28 @@ function plot_planet!(
     end
 
     # We add some shift to demonstrate how UVs work:
-    uv = gen_uv(1.0)
+    uv = gen_uv(0.0)
     # We can use a Buffer to update single elements in an array directly on the GPU
     # with GLMakie. They work just like normal arrays, but forward any updates written to them directly to the GPU
     uv_buff = Buffer(uv)
-    #gb_mesh = GeometryBasics.Mesh(points, _faces; uv = uv_buff, normal = _normals)
 
     # Apply rotations & shift center
-    rotated_points, R = rotate_shift_points(points, rotation, center)
-    rotated_normals = [R * n for n in _normals]
-    gb_mesh = GeometryBasics.Mesh(rotated_points, _faces; uv = uv_buff, normal = rotated_normals)
+    if rotation != (0.0, 0.0, 0.0)
+        rotated_points, R = rotate_shift_points(points, rotation, center)
+        rotated_normals = [R * n for n in _normals]
+        gb_mesh = GeometryBasics.Mesh(rotated_points, _faces; uv = uv_buff, normal = rotated_normals)
+    else
+        gb_mesh = GeometryBasics.Mesh(points, _faces; uv = uv_buff, normal = _normals)
+    end
 
+    # get colors from file
     data = load(asset_name)
     color = Sampler(rotl90(data'), x_repeat=:mirrored_repeat,y_repeat=:repeat)
-    mesh!(ax, gb_mesh, color = color)
+
+    # append image to mesh
+    mesh!(ax, gb_mesh,  color = color)
+    uv_buff[1:end] = gen_uv(1)
+
     if show_wireframe
         wireframe!(ax, gb_mesh, color=(:black, 0.2), linewidth=2, transparency=true)
     end
