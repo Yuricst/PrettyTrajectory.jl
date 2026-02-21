@@ -105,3 +105,26 @@ function plot_cone!(
     band!(ax, lower, upper, color=col, alpha=alpha, colormap=cgrad([color, color]))
     return
 end
+
+
+
+function plot_sphere!(ax::Union{Axis3,LScene}, radius::Real, center::Vector, nsph::Int=12; color=:red, alpha=0.5)
+    # Reduce quality of sphere
+    s = Tessellation(Sphere(Point3f(center), radius), nsph)
+    ps = coordinates(s)
+    fs = faces(s)
+
+    # Use a FaceView to with a new set of faces which refer to one color per face.
+    # Each face must have the same length as the respective face in fs.
+    # (Using the same face type guarantees this)
+    FT = eltype(fs); N = length(fs)
+    cs = FaceView([alphacolor(Colors.parse(RGBA, color), alpha) for i in 1:N], [FT(i) for i in 1:N])
+
+    # generate normals per face (this creates a FaceView as well)
+    ns = face_normals(ps, fs)
+
+    # Create mesh
+    m = GeometryBasics.mesh(ps, fs, normal = ns, color = cs)
+    mesh!(ax, m)
+    return
+end
