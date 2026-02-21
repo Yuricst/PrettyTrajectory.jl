@@ -1,6 +1,7 @@
 """Module for pretty trajectory plotting with Makie"""
 
 module PrettyTrajectory
+    using Colors
     using FileIO
     using GeometryBasics
     using GLMakie
